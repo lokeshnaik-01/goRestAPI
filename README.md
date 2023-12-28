@@ -23,3 +23,7 @@ Prepare() prepares a SQL statement - this can lead to better performance if the 
 This is only true, if the prepared statement is not closed (stmt.Close()) in between those executions. In that case, there wouldn't be any advantages.
 
 And, indeed, in this application, we are calling stmt.Close() directly after calling stmt.Exec(). So here, it really wouldn't matter which approach you're using.
+
+
+# IMPORTANT
+in db.go we declared DB as gloabl value in InitSB() again if we do `DB,err:=sql.Open()` it'll reassign the value which can cause issue as DB is a pointer to sql
