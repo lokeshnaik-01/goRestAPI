@@ -4,9 +4,10 @@ import(
 	_ "github.com/mattn/go-sqlite3"
 )
 var DB *sql.DB
+var err error
 // we get pointer to database
 func InitDB() {
-	DB, err := sql.Open("sqlite3", "api.db")
+	DB, err = sql.Open("sqlite3", "api.db")
 	if(err!=nil) {
 		panic("Could not connect to DB")
 	}
