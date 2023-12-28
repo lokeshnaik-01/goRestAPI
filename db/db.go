@@ -27,7 +27,7 @@ func createTables() {
 	)`
 
 	_, err := DB.Exec(createEventsTable)
-	if err!=nil {
+	if err != nil {
 		panic("events table not executed")
 	}
 }
