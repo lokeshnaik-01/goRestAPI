@@ -24,10 +24,23 @@ func createTables() {
 		description varchar(50) NOT NULL,
 		location text NOT NULL,
 		dateTime DATETIME NOT NULL,
-		user_id INTEGER
+		user_id INTEGER,
+		FOREIGN KEY(user_id) REFERENCES users(id)
 	)`
 
-	_, err := DB.Exec(createEventsTable)
+	createUsersTable := `
+	CREATE TABLE IF NOT EXISTS users (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		email TEXT NOT NULL UNIQUE,
+		password TEXT NOT NULL
+	)
+	`
+	_, err := DB.Exec(createUsersTable)
+	if err != nil {
+		panic("events table not executed")
+	}
+
+	_, err = DB.Exec(createEventsTable)
 	if err != nil {
 		panic("events table not executed")
 	}
