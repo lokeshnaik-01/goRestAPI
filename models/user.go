@@ -11,7 +11,7 @@ type User struct {
 	Password string `binding:"required"`
 }
 
-func (u User) Save() error{
+func (u *User) Save() error{
 	query:= "INSERT INTO Users(email, password) VALUES (?,?)"
 	stmt, err := db.DB.Prepare(query)
 	if err!=nil {
@@ -26,12 +26,12 @@ func (u User) Save() error{
 	if err!=nil {
 		return err
 	}
-	userId, err := result.LastInsertId()
-	u.ID = userId
+	id, err := result.LastInsertId()
+	u.ID = id
 	return err
 }
 
-func(u User) ValidateCredentials() error{
+func(u *User) ValidateCredentials() error{
 	query := "SELECT id, password FROM users WHERE email = ?"
 	row := db.DB.QueryRow(query, u.Email)
 	var retrievedPassword string
