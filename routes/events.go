@@ -1,9 +1,12 @@
 package routes
+
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"example.com/restAPI/models"
 	"strconv"
+
+	"example.com/restAPI/models"
+	"example.com/restAPI/utils"
+	"github.com/gin-gonic/gin"
 )
 
 func getEvent(context *gin.Context) {
@@ -34,9 +37,21 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
+	// token should be passed as header
+	token := context.Request.Header.Get("Authorization")
+	if token == "" {
+		context.JSON(http.StatusUnauthorized, gin.H{"message":"Unauthorized"})
+		return
+	}
+	
+	err := utils.VerifyToken((token))
+	if err!=nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message":"Unauthorized"})
+		return
+	}
 	var event models.Event
 	// gin extracts the input params and matches it with struct
-	err := context.ShouldBindJSON(&event)
+	err = context.ShouldBindJSON(&event)
 	if err!=nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse req data"})
 		return
